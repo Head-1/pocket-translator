@@ -8,14 +8,18 @@ O sistema é otimizado para portabilidade, extensibilidade e execução em ambie
 
 ---
 
-## 2. Princípios de Design
+## 2. Princípios de Arquitetura
 
-- **Arquitetura orientada a provedores**
+A solução segue os seguintes principios:
+- **Arquitetura orientada a provedores(Provider Pattern**
 - **Cloud-first, compatível com Edge**
 - **Contratos baseados em interfaces**
+- **Fallback local automático**
 - **Execução local tolerante a falhas**
 - **Interação CLI-first**
 - **Configuração via variáveis de ambiente**
+- **Separação estrita entre Core e integrações**
+- **Segurança por design**
 
 ---
 
@@ -59,18 +63,18 @@ Responsável por carregar:
 ## 4. Fluxo de Execução
 
 [Usuário / CLI]
-|
-v
-[Dispatcher]
-|
-v
+        |
+        v
+   [Dispatcher]
+        |
+        v
 [Provider de Tradução / Transliteração]
-|
-v
-[API Externa ou Engine]
-|
-v
-[Resultado para a CLI]
+        |
+        v
+ [API Externa ou Engine]
+        |
+        v
+   [Resultado]
 
 ---
 
@@ -82,6 +86,8 @@ O Azure AI Translator é utilizado através de:
 - Versão de API `3.0`
 - Variáveis de ambiente para credenciais
 - Roteamento baseado em região
+- Autenticação via headers
+- Comunicação HTTPS
 
 A segurança é garantida por:
 
@@ -94,24 +100,30 @@ A segurança é garantida por:
 
 ## 6. Execução Mobile / Edge
 
-O sistema é compatível com Termux:
+O projeto foi projetado para execução em Termux / Android, suportando:
 
-- Ambientes virtuais Python
+- Python virtual environments
 - Dependências leves
-- Automação via CLI
-- Provedores offline como fallback
+- Execução offline parcial
+- Automação por CLI
+- Integração com agentes externos
+- Execução contínua em modo daemon (roadmap)
 
-Isso permite a criação de nós portáteis de tradução com suporte em nuvem.
+Isso permite transformar smartphones em **nós móveis de tradução** integrados a pipelines 
+DevOps ou sistemas de orquestração Edge.
 
 ---
 
 ## 7. Considerações de Segurança
 
-- Chaves de API nunca versionadas
-- Tokenização via ambiente
-- Nenhuma porta exposta
+A arquitetura segue práticas básicas de segurança:
+- Nenhuma credencial hardcoded
+- Secrets via environment variables
+- Sem portas abertas por padrão
 - Superfície apenas CLI
-- Compatível com túneis SSH
+- Pronto para túnel SSH
+- Compatível com ambientes Zero-Trust
+- Execução local-first
 
 ---
 
@@ -120,26 +132,46 @@ Isso permite a criação de nós portáteis de tradução com suporte em nuvem.
 Novos provedores podem ser adicionados seguindo:
 
 1. Implementar interfaces em `core/interfaces.py`
-2. Criar um módulo de provider
+2. Criar módulo em providers/<nome> 
 3. Registrar no Dispatcher
 4. Atualizar documentação
+5. Adicionar testes automatizados
+
+Esse modelo garante:
+
+- Baixo acoplamento
+- Evolução incremental
+- Multi-cloud real
+- Fácil integração corporativa
 
 ---
 
 ## 9. Roadmap Futuro (Pós-Bootcamp)
 
-- Integração com Skuld MCP
-- Modo daemon mobile
-- Gateway REST
-- Orquestração baseada em agentes
-- Edge control-plane
-- Pipelines de telemetria
+- Integração com Skuld-MCP como plano de controle mobile
+- Execução como daemon Edge
+- Gateway REST opcional
+- Agentes autônomos
+- Orquestração mobile-first
+- Pipeline de telemetria
+- Observabilidade
+- Cache local de traduções
+- Fila assíncrona
+- Plugins de providers
 
 ---
 
 ## 10. Resumo
 
-O Pocket Translator demonstra como serviços de IA cloud-native como o Azure AI Translator podem ser utilizados em ambientes móveis e edge por meio de uma arquitetura limpa, desacoplada e orientada a provedores.
+O Pocket Translator demonstra como serviços cloud-native como o Azure AI Translator 
+podem ser utilizados em ambientes Edge e Mobile por meio de:
+
+- Arquitetura limpa
+- Separação de responsabilidades
+- Provider abstraction
+- Segurança por design
+- Extensibilidade multi-cloud
+- Pronto para integração com sistemas maiores como o Skuld-MCP
 
 ---
 

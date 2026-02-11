@@ -9,7 +9,7 @@ def translate(
     text: str,
     source: str = "en",
     target: str = "pt",
-    provider: str = typer.Option(None, help="Provider: local | azure"),
+    provider: str = typer.Option(None, "--provider", "-p"),
 ):
     dispatcher = Dispatcher(provider=provider)
     result = dispatcher.translate(text, source, target)
@@ -21,7 +21,7 @@ def transliterate(
     text: str,
     language: str,
     script: str,
-    provider: str = typer.Option(None, help="Provider: local | azure"),
+    provider: str = typer.Option(None, "--provider", "-p"),
 ):
     dispatcher = Dispatcher(provider=provider)
     result = dispatcher.transliterate(text, language, script)
